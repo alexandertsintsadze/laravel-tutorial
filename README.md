@@ -1,4 +1,4 @@
-npm i
-composer i
-cp .env.example .env
-php artisan key:generate
+<p>npm i</p>
+<p>composer i</p>
+<p>cp .env.example .env</p>
+<p>php artisan key:generate</p>
