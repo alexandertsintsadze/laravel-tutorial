@@ -45,6 +45,7 @@
                     />
                 </label>
             </div>
+            <input type="file" name="photo" /><br />
             <input type="submit" value="შენახვა" />
         </form>
     </div>

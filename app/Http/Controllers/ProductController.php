@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Product;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\File;
 
 class ProductController extends Controller
 {
@@ -36,10 +37,15 @@ class ProductController extends Controller
             'price' => 'required|numeric|max:1000000',
         ]);
 
+        $photo = $request->file('photo');
+        $file = $request->file('photo')->store('images', 'public');
+        dump($file);
+
         Product::create([
             'title' => $validated['title'],
             'description' => $validated['description'],
-            'price' => $validated['price'] * 100
+            'price' => $validated['price'] * 100,
+            'photo' => $file,
         ]);
 
         return 'შეიქმნა';
