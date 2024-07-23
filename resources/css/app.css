@@ -1,3 +1,15 @@
+
+@import 'bootstrap/dist/css/bootstrap.min.css';
+
+
+@import 'test.css';
+
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+
+.test {
+    color: white;
+}

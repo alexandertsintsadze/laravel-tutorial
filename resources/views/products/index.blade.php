@@ -6,13 +6,14 @@
 
 @section('content')
     <div class="container">
+        <input type="text" class="form-control"/>
         <h1>პროდუქტების სია</h1>
         @if (session('edit_successful'))
             <div class="alert alert-success">
                 {{ session('edit_successful') }}
             </div>
         @endif
-
+        
         @if (session('delete_successful'))
             <div class="alert alert-danger">
                 {{ session('delete_successful') }}
@@ -38,7 +39,7 @@
             </div>
         @endforeach
 
-        {{$products->links()}}
+        {{-- {{$products->links()}} --}}
     </div>
 @endsection
 

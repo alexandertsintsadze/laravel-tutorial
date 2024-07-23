@@ -3,6 +3,7 @@
 use App\Http\Controllers\EloquentController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\SessionController;
 use App\Http\Controllers\TestController;
 use Illuminate\Support\Facades\Route;
 
@@ -27,6 +28,9 @@ Route::get('/collection', [TestController::class, 'collectionSatesto']);
 Route::get('/relations', [EloquentController::class, 'index']);
 
 Route::get('/orders', [OrderController::class, 'index']);
+
+Route::get('/session', [SessionController::class, 'index']);
+Route::get('/session-test', [SessionController::class, 'testIndex']);
 
 // Route::get('/dashboard', function () {
 //     return view('dashboard');

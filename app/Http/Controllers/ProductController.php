@@ -3,8 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Models\Product;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class ProductController extends Controller
 {
@@ -13,7 +16,12 @@ class ProductController extends Controller
      */
     public function index(Request $request)
     {
-        $products = Product::paginate()->withQueryString();
+        // $products = Product::paginate()->withQueryString();
+        $productQuery = Product::whereNot('id', 1);
+
+        $products = $productQuery->get();
+
+
 
         return view('products.index', ['products' => $products]);
     }
@@ -64,6 +72,8 @@ class ProductController extends Controller
      */
     public function edit(Product $product)
     {
+        // dump($product->created_at);
+
         return view('products.edit', ['product' => $product]);
     }
 
