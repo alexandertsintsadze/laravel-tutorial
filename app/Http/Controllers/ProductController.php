@@ -2,11 +2,16 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Interfaces\TestServiceInterface;
+use App\Http\Services\TestService;
 use App\Models\Product;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Session;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class ProductController extends Controller
@@ -14,16 +19,9 @@ class ProductController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(Request $request)
+    public function index(Request $request, TestServiceInterface $testService, JobServiceInterface $jobService)
     {
-        // $products = Product::paginate()->withQueryString();
-        $productQuery = Product::whereNot('id', 1);
-
-        $products = $productQuery->get();
-
-
-
-        return view('products.index', ['products' => $products]);
+        return $jobService->index();
     }
 
     /**
@@ -47,7 +45,6 @@ class ProductController extends Controller
 
         $photo = $request->file('photo');
         $file = $request->file('photo')->store('images', 'public');
-        dump($file);
 
         Product::create([
             'title' => $validated['title'],
@@ -74,6 +71,11 @@ class ProductController extends Controller
     {
         // dump($product->created_at);
 
+
+        Log::error('test');
+        $productTest = 10;
+        $productTest['price'];
+        Log::info('Someone viewed product with ID: ' . $product['id']);
         return view('products.edit', ['product' => $product]);
     }
 

@@ -1,11 +1,16 @@
 @extends('layouts.admin')
 
 @section('title')
-    პროდუქცია
+    {{ __('main.products') }}
 @endsection
 
 @section('content')
     <div class="container">
+        <a href="/set-language/en">ENG</a>
+        <a href="/set-language/ka">ქარ</a>
+        {{ __('main.products_updated', ['number' => 10])}}
+
+        {{ __('Product List')}}
         <input type="text" class="form-control"/>
         <h1>პროდუქტების სია</h1>
         @if (session('edit_successful'))
