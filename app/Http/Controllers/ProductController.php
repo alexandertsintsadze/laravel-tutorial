@@ -2,7 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Interfaces\TestServiceInterface;
+use App\Events\ProductCreated;
+use App\Events\ProductUpdated;
 use App\Http\Services\TestService;
 use App\Models\Product;
 use Carbon\Carbon;
@@ -19,9 +20,13 @@ class ProductController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(Request $request, TestServiceInterface $testService, JobServiceInterface $jobService)
+    public function index(Request $request)
     {
-        return $jobService->index();
+        $productQuery = Product::whereNot('id', 1);
+
+        $products = $productQuery->get();
+
+        return view('products.index', ['products' => $products]);
     }
 
     /**
@@ -46,12 +51,14 @@ class ProductController extends Controller
         $photo = $request->file('photo');
         $file = $request->file('photo')->store('images', 'public');
 
-        Product::create([
+        $product = Product::create([
             'title' => $validated['title'],
             'description' => $validated['description'],
             'price' => $validated['price'] * 100,
             'photo' => $file,
         ]);
+
+        ProductCreated::dispatch($product);
 
         return 'შეიქმნა';
     }
@@ -76,6 +83,11 @@ class ProductController extends Controller
         $productTest = 10;
         $productTest['price'];
         Log::info('Someone viewed product with ID: ' . $product['id']);
+
+        
+
+        ProductUpdated::dispatch($product);
+
         return view('products.edit', ['product' => $product]);
     }
 
