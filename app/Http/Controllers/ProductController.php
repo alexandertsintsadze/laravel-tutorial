@@ -5,10 +5,13 @@ namespace App\Http\Controllers;
 use App\Events\ProductCreated;
 use App\Events\ProductUpdated;
 use App\Http\Services\TestService;
+use App\Jobs\TestJob;
 use App\Models\Product;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Bus;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Log;
@@ -22,9 +25,17 @@ class ProductController extends Controller
      */
     public function index(Request $request)
     {
-        $productQuery = Product::whereNot('id', 1);
+        // $products = Product::get();
+        $products = Cache::rememberForever('products', function () {
+            dump('ამოვიკითხე ბაზიდან');
+            return Product::get();
+        });
 
-        $products = $productQuery->get();
+        TestJob::dispatch('satesto teqsti')->delay(now()->addSeconds(4));
+dump('test');
+        // Bus::dispatch(new TestJob());
+
+        // $products = $productQuery->get();
 
         return view('products.index', ['products' => $products]);
     }
@@ -57,6 +68,8 @@ class ProductController extends Controller
             'price' => $validated['price'] * 100,
             'photo' => $file,
         ]);
+
+        Cache::forget('products');
 
         ProductCreated::dispatch($product);
 
