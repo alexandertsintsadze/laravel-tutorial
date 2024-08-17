@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Events\ProductCreated;
 use App\Events\ProductUpdated;
+use App\Http\Interfaces\PhotoServiceInterface;
 use App\Http\Services\TestService;
 use App\Jobs\TestJob;
 use App\Models\Product;
@@ -23,8 +24,9 @@ class ProductController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(Request $request)
+    public function index(Request $request, PhotoServiceInterface $photoServiceInterface)
     {
+        // return $photoServiceInterface->createPhoto(1);
         // $products = Product::get();
         $products = Cache::rememberForever('products', function () {
             dump('ამოვიკითხე ბაზიდან');
@@ -39,6 +41,13 @@ dump('test');
 
         return view('products.index', ['products' => $products]);
     }
+
+    
+    public function indexTest()
+    {
+        return ['products' => Product::get()];
+    }
+
 
     /**
      * Show the form for creating a new resource.
@@ -59,8 +68,8 @@ dump('test');
             'price' => 'required|numeric|max:1000000',
         ]);
 
-        $photo = $request->file('photo');
-        $file = $request->file('photo')->store('images', 'public');
+        $file = '';
+        if ($request->has('photo')) $file = $request->file('photo')->store('images', 'public');
 
         $product = Product::create([
             'title' => $validated['title'],
@@ -117,7 +126,7 @@ dump('test');
 
         $product->update([
             'title' => $validated['title'],
-            'description' => $validated['description'],
+            'description' => $validated['description'] ?? $product->description,
             'price' => $validated['price'] * 100
         ]);
 

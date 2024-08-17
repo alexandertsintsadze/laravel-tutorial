@@ -14,13 +14,14 @@ Route::get('/', function () {
 });
 
 Route::get('/about', [TestController::class, 'show']);
-Route::get('/products', [ProductController::class, 'index']);
+Route::get('/products', [ProductController::class, 'index'])->name('products.index');
 Route::get('/products/create', [ProductController::class, 'create']);
 Route::post('/products', [ProductController::class, 'store'])->name('product.create');
 Route::get('/products/{product}', [ProductController::class, 'show']);
 Route::put('/products/{product}', [ProductController::class, 'update'])->name('product.update');
 Route::get('/products/{product}/edit', [ProductController::class, 'edit'])->name('product.edit');
 Route::delete('/products/{product}', [ProductController::class, 'destroy']);
+Route::get('/products-test', [ProductController::class, 'indexTest'])->name('products.index-test');
 
 
 Route::get('/collection', [TestController::class, 'collectionSatesto']);
@@ -37,6 +38,7 @@ Route::get('/set-language/{lang}', [LanguageController::class, 'update']);
 
 
 Route::get('/report', [ReportController::class, 'index']);
+Route::get('/query-test', [TestController::class, 'queryTest']);
 
 // Route::get('/dashboard', function () {
 //     return view('dashboard');
