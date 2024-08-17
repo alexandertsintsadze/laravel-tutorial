@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
 
@@ -139,5 +140,54 @@ class TestController extends Controller
     
     public function sheinaxeBazashiProductebi(array $products) {
 
+    }
+
+    public function queryTest(Request $request) {
+        $accountsQuery = User::whereHas('orders', function ($query) {
+            $query->whereHas('orderProducts', function ($orderProductQuery) {
+                $orderProductQuery->where('product_id', 5);
+                // $orderProductQuery->whereHas('orderProducts');
+            });
+        });
+
+        dump($accountsQuery->toSql());
+
+        $accounts = $accountsQuery->get();
+
+        dump($accounts);
+
+        $account = User::find(1);
+
+        $orders = $account->orders()->where('price', '>', 100)->get();
+
+        dump($orders);
+
+        $accounts = User::has('orders.orderProducts')->get();
+
+        dump($accounts);
+
+        $noOrderAccounts = User::doesntHave('orders')->get();
+
+        dump($noOrderAccounts);
+
+        $accounts = User::withCount('orders')->get();
+
+        dump($accounts->first()->orders_count);
+        
+
+        $accounts = User::withSum('orders as order_price', 'price')->get();
+
+        dump($accounts->first()->order_price);
+
+        $accounts = User::with([
+            'orders',
+            'orders.orderProducts.product' => function ($query) {
+                $query->withTrashed();
+            }
+        ])->get();
+
+        dump($accounts);
+
+        // chunk
     }
 }

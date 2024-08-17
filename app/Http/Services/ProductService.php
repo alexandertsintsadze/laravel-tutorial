@@ -29,4 +29,8 @@ class ProductService {
             'quantity' => 2
         ]);
     }
+
+    public function itShouldRemoveCharacterAFromText($text) {
+        return str_replace('a', '', $text);
+    }
 }
